@@ -1,1 +1,1 @@
-# Oracle-Attack-via-Chi-Square-LSB-Modification
+# Oracle-Attack-via-RS-Analysis-LSB-Modification
