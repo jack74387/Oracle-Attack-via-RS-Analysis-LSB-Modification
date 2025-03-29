@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from util import calculate_count_groups, rs_helper, find_root, scattered_lsb_flipping
+from util import rs_helper
 
 def detect_stego_image(rs_values, threshold=0.1):
     """
