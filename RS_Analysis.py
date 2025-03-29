@@ -21,45 +21,46 @@ def detect_stego_image(rs_values, threshold=0.1):
     return False
 
 
-# 參數設定
-mask_size = (8, 8)
-mask = np.random.randint(0, 2, size=mask_size)
+if __name__ == "__main__":
+    # 參數設定
+    mask_size = (8, 8)
+    mask = np.random.randint(0, 2, size=mask_size)
 
-# 顯示 Mask 圖
-plt.title('Mask')
-plt.imshow(mask, cmap='gray')
-plt.axis('off')
-plt.show()
+    # 顯示 Mask 圖
+    plt.title('Mask')
+    plt.imshow(mask, cmap='gray')
+    plt.axis('off')
+    plt.show()
 
-# 📂 讀取影像
-img_path = input("📂 Enter image file name: ")
-img = cv2.cvtColor(cv2.imread(img_path), cv2.COLOR_BGR2RGB).astype('int16')
+    # 📂 讀取影像
+    img_path = input("📂 Enter image file name: ")
+    img = cv2.cvtColor(cv2.imread(img_path), cv2.COLOR_BGR2RGB).astype('int16')
 
-# 調整圖片大小以適應 mask
-img_h, img_w = img.shape[:2]
-img_h += (mask_size[0] - img_h % mask_size[0]) % mask_size[0]
-img_w += (mask_size[1] - img_w % mask_size[1]) % mask_size[1]
-img = cv2.resize(img, (img_w, img_h), interpolation=cv2.INTER_AREA)
+    # 調整圖片大小以適應 mask
+    img_h, img_w = img.shape[:2]
+    img_h += (mask_size[0] - img_h % mask_size[0]) % mask_size[0]
+    img_w += (mask_size[1] - img_w % mask_size[1]) % mask_size[1]
+    img = cv2.resize(img, (img_w, img_h), interpolation=cv2.INTER_AREA)
 
-plt.title('Image')
-plt.imshow(img)
-plt.axis('off')
-plt.show()
+    plt.title('Image')
+    plt.imshow(img)
+    plt.axis('off')
+    plt.show()
 
-# 計算 RS 分析的四個參數（分别針對 R, G, B 三個通道）
-channels = [img[:, :, i] for i in range(3)]  # 分别取 R, G, B 三個通道
-results = [rs_helper([channel], mask) for channel in channels]  # 分别計算每個通道
+    # 計算 RS 分析的四個參數（分别針對 R, G, B 三個通道）
+    channels = [img[:, :, i] for i in range(3)]  # 分别取 R, G, B 三個通道
+    results = [rs_helper([channel], mask) for channel in channels]  # 分别計算每個通道
 
-# # 輸出结果
-# for i, color in enumerate(["Red", "Green", "Blue"]):
-#     rm, sm, r_neg_m, s_neg_m = results[i]
-#     print(f"{color} Channel - Rm: {rm:.6f}, R-m: {r_neg_m:.6f}, Sm: {sm:.6f}, S-m: {s_neg_m:.6f}")
+    # # 輸出结果
+    # for i, color in enumerate(["Red", "Green", "Blue"]):
+    #     rm, sm, r_neg_m, s_neg_m = results[i]
+    #     print(f"{color} Channel - Rm: {rm:.6f}, R-m: {r_neg_m:.6f}, Sm: {sm:.6f}, S-m: {s_neg_m:.6f}")
 
-# 檢測是否有隱寫
-is_stego = detect_stego_image(results)
+    # 檢測是否有隱寫
+    is_stego = detect_stego_image(results)
 
-# 顯示結果
-if is_stego:
-    print(f"⚠️ {img_path} 可能含有隱寫資訊！")
-else:
-    print(f"✅ {img_path} 看起來是未修改的原始圖片。")
+    # 顯示結果
+    if is_stego:
+        print(f"⚠️ {img_path} 可能含有隱寫資訊！")
+    else:
+        print(f"✅ {img_path} 看起來是未修改的原始圖片。")
